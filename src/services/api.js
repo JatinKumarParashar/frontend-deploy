@@ -1,4 +1,4 @@
-const API = import.meta.env.VITE_BACKEND_URL || "https://backend-deploy-msl1.onrender.com";
+const API = import.meta.env.VITE_BACKEND_URL;
 
 export async function api(path, options = {}) {
   const response = await fetch(`${API}${path}`, {
@@ -6,6 +6,9 @@ export async function api(path, options = {}) {
     ...options,
   });
   const data = await response.json();
+
+
+  console.log("backend is running from port",API,data.demo_otp)
   if (!response.ok) throw new Error(data.detail || "Request failed");
   return data;
 }

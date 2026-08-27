@@ -38,14 +38,11 @@ export default function AuthScreen({ onLogin }) {
     const identifier = signup.phone || signup.email;
     if (!identifier) return setMessage("Enter email or phone first.");
     try {
-      setVerificationCode(
-        (
-          await api("/auth/send-otp", {
-            method: "POST",
-            body: JSON.stringify({ phone_or_email: identifier }),
-          })
-        ).verification_code,
-      );
+     let otp = await api("/auth/send-otp", {
+        method: "POST",
+        body: JSON.stringify({ phone_or_email: identifier }),
+      });
+      setVerificationCode(otp.demo_otp ?? otp.verification_code ?? "");
     } catch (error) {
       setMessage(error.message);
     }
