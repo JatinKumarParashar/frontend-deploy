@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AuthScreen from "./components/AuthScreen";
 import AppLayout from "./layouts/AppLayout";
@@ -14,16 +15,19 @@ function ProtectedRoute({ user, children }) {
 
 export default function App() {
   const storedUser = JSON.parse(localStorage.getItem("spotify-user") || "null");
-  const user = storedUser?.user_id === "demo_user" ? null : storedUser;
+  const [user, setUser] = useState(
+    storedUser?.user_id === "demo_user" ? null : storedUser,
+  );
   if (!user && storedUser?.user_id === "demo_user") {
     localStorage.removeItem("spotify-user");
   }
   function login(data) {
     localStorage.setItem("spotify-user", JSON.stringify(data));
-    window.location.href = "/";
+    setUser(data);
   }
   function logout() {
     localStorage.removeItem("spotify-user");
+    setUser(null);
   }
   return (
     <BrowserRouter>
